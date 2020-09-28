@@ -1,33 +1,43 @@
 package ru.mail.polis.ads.part1.Serikuly_Miras;
 
 import java.io.*;
-import java.util.Arrays;
+import java.util.EmptyStackException;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 public class Task3837 {
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
-
         for (int i = 0; i < n; ++i) {
             char[] expression = in.next().toCharArray();
-            String[] result = new String[expression.length];
-            Arrays.fill(result, "");
-            Index index = new Index(expression.length - 1);
-            levelsOrderWalk(expression, index, 0, result);
-            for (int k = expression.length - 1; k >= 0; --k)
-                out.write(result[k]);
-            out.write("\n");
-            out.flush();
+            StackForTwo<Node> stack = new StackForTwo<>();
+            for (char symbol : expression) {
+                if (Character.isLowerCase(symbol)) {
+                    stack.push(new Node(symbol, null, null));
+                } else {
+                    Node left = stack.pop();
+                    Node right = stack.pop();
+                    stack.push(new Node(symbol, left, right));
+                }
+            }
+            out.println(contInOrder(stack.pop()));
         }
     }
 
-    public static void levelsOrderWalk(char[] expression, Index index, int depth, String[] result) {
-        result[depth] += expression[index.value];
-        --index.value;
-        if (Character.isUpperCase(expression[index.value + 1])) {
-            levelsOrderWalk(expression, index, depth + 1, result);
-            levelsOrderWalk(expression, index, depth + 1, result);
+    private static String contInOrder(Node root) {
+        QueueTaskTwo<Node> queue = new QueueTaskTwo<>();
+        StringBuilder builder = new StringBuilder();
+        queue.push(root);
+        Node current;
+        while (queue.getSize() != 0) {
+            current = queue.pop();
+            if (current.right != null)
+                queue.push(current.right);
+            if (current.left != null)
+                queue.push(current.left);
+            builder.insert(0, current.item);
         }
+        return builder.toString();
     }
 
     private static class FastScanner {
@@ -60,12 +70,150 @@ public class Task3837 {
             solve(in, out);
         }
     }
+
+    static class Node {
+        char item;
+        Node left;
+        Node right;
+
+        public Node(char item, Node left, Node right) {
+            this.item = item;
+            this.left = left;
+            this.right = right;
+        }
+    }
 }
 
-class Index {
-    int value;
+class StackForTwo<E> {
+    private int size;
+    private Node<E> tail;
 
-    public Index(int a) {
-        value = a;
+    public StackForTwo() {
+        this.size = 0;
+        this.tail = null;
+    }
+
+
+    private static class Node<E> {
+        E item;
+        Node<E> prev;
+
+        Node(E element, Node<E> prev) {
+            this.item = element;
+            this.prev = prev;
+        }
+
+        void clear() {
+            this.item = null;
+            this.prev = null;
+        }
+    }
+
+    public void push(E element) {
+        this.tail = new Node<>(element, this.tail);
+        size++;
+    }
+
+    public E pop() throws EmptyStackException {
+        if (size == 0)
+            throw new EmptyStackException();
+
+        Node<E> current = this.tail;
+        this.tail = this.tail.prev;
+        size--;
+        return current.item;
+    }
+
+    public E back() throws EmptyStackException {
+        if (size == 0)
+            throw new EmptyStackException();
+        return this.tail.item;
+    }
+
+    public void clear() {
+        Node<E> current = this.tail;
+        Node<E> next;
+        while (current != null) {
+            next = current.prev;
+            current.clear();
+            current = next;
+        }
+        this.size = 0;
+        this.tail = null;
+    }
+
+    public int getSize() {
+        return size;
+    }
+}
+
+class QueueTaskTwo<E> {
+    private int size;
+    private Node<E> head;
+    private Node<E> tail;
+
+    public QueueTaskTwo() {
+        this.size = 0;
+        this.tail = null;
+        this.head = null;
+    }
+
+    private static class Node<E> {
+        E item;
+        Node<E> next;
+
+        Node(E element, Node<E> next) {
+            this.item = element;
+            this.next = next;
+        }
+
+        void clear() {
+            this.item = null;
+            this.next = null;
+        }
+    }
+
+    public void push(E element) {
+        Node<E> node = new Node<E>(element, null);
+        if (this.tail != null)
+            this.tail.next = node;
+        if (this.head == null)
+            this.head = node;
+        this.tail = node;
+        size++;
+    }
+
+    public E pop() throws NoSuchElementException {
+        if (size == 0)
+            throw new EmptyStackException();
+
+        Node<E> current = this.head;
+        this.head = this.head.next;
+        size--;
+        return current.item;
+    }
+
+    public E front() throws NoSuchElementException {
+        if (size == 0)
+            throw new EmptyStackException();
+        return this.head.item;
+    }
+
+    public void clear() {
+        Node<E> current = this.head;
+        Node<E> next;
+        while (current != null) {
+            next = current.next;
+            current.clear();
+            current = next;
+        }
+
+        this.size = 0;
+        this.tail = null;
+        this.head = null;
+    }
+
+    public int getSize() {
+        return size;
     }
 }

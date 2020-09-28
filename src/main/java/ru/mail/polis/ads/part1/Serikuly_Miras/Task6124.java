@@ -93,6 +93,7 @@ class Stack<E> {
         this.tail = null;
     }
 
+
     private static class Node<E> {
         E item;
         Node<E> prev;

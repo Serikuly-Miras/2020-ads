@@ -2,6 +2,7 @@ package ru.mail.polis.ads.part1.Serikuly_Miras;
 
 import java.io.*;
 import java.util.EmptyStackException;
+import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 public class Task6125 {
@@ -120,7 +121,7 @@ class Queue<E> {
         size++;
     }
 
-    public E pop() throws EmptyStackException {
+    public E pop() throws NoSuchElementException {
         if (size == 0)
             throw new EmptyStackException();
 
@@ -130,7 +131,7 @@ class Queue<E> {
         return current.item;
     }
 
-    public E front() throws EmptyStackException {
+    public E front() throws NoSuchElementException {
         if (size == 0)
             throw new EmptyStackException();
         return this.head.item;
