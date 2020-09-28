@@ -10,7 +10,7 @@ public class Task3837 {
         int n = in.nextInt();
         for (int i = 0; i < n; ++i) {
             char[] expression = in.next().toCharArray();
-            StackForTwo<Node> stack = new StackForTwo<>();
+            StackTaskTwo<Node> stack = new StackTaskTwo<>();
             for (char symbol : expression) {
                 if (Character.isLowerCase(symbol)) {
                     stack.push(new Node(symbol, null, null));
@@ -21,6 +21,18 @@ public class Task3837 {
                 }
             }
             out.println(contInOrder(stack.pop()));
+        }
+    }
+
+    private static class Node {
+        char item;
+        Node left;
+        Node right;
+
+        public Node(char item, Node left, Node right) {
+            this.item = item;
+            this.left = left;
+            this.right = right;
         }
     }
 
@@ -70,29 +82,16 @@ public class Task3837 {
             solve(in, out);
         }
     }
-
-    static class Node {
-        char item;
-        Node left;
-        Node right;
-
-        public Node(char item, Node left, Node right) {
-            this.item = item;
-            this.left = left;
-            this.right = right;
-        }
-    }
 }
 
-class StackForTwo<E> {
+class StackTaskTwo<E> {
     private int size;
     private Node<E> tail;
 
-    public StackForTwo() {
+    public StackTaskTwo() {
         this.size = 0;
         this.tail = null;
     }
-
 
     private static class Node<E> {
         E item;
