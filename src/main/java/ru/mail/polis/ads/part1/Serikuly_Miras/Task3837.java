@@ -6,6 +6,18 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 public class Task3837 {
+    private static class Node {
+        char item;
+        Node left;
+        Node right;
+
+        public Node(char item, Node left, Node right) {
+            this.item = item;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
     private static void solve(final FastScanner in, final PrintWriter out) {
         int n = in.nextInt();
         for (int i = 0; i < n; ++i) {
@@ -21,18 +33,6 @@ public class Task3837 {
                 }
             }
             out.println(contInOrder(stack.pop()));
-        }
-    }
-
-    private static class Node {
-        char item;
-        Node left;
-        Node right;
-
-        public Node(char item, Node left, Node right) {
-            this.item = item;
-            this.left = left;
-            this.right = right;
         }
     }
 
