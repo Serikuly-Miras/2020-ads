@@ -42,9 +42,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private Node get(Node node, Key key) {
         if (node == null) return null;
 
-        if (key.compareTo(node.key) < 0) {
+        int compareResult = key.compareTo(node.key);
+        if (compareResult < 0) {
             return get(node.left, key);
-        } else if (key.compareTo(node.key) > 0) {
+        } else if (compareResult > 0) {
             return get(node.right, key);
         } else {
             return node;
@@ -62,9 +63,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
             return new Node(key, value, 1);
         }
 
-        if (key.compareTo(node.key) < 0) {
+        int compareResult = key.compareTo(node.key);
+        if (compareResult < 0) {
             node.left = put(node.left, key, value);
-        } else if (key.compareTo(node.key) > 0) {
+        } else if (compareResult > 0) {
             node.right = put(node.right, key, value);
         } else {
             node.value = value;
@@ -131,9 +133,10 @@ public class AvlBst<Key extends Comparable<Key>, Value>
     private Node remove(Node node, Key key) {
         if (node == null) return null;
 
-        if (key.compareTo(node.key) < 0) {
+        int compareResult = key.compareTo(node.key);
+        if (compareResult < 0) {
             node.left = remove(node.left, key);
-        } else if (key.compareTo(node.key) > 0) {
+        } else if (compareResult > 0) {
             node.right = remove(node.right, key);
         } else {
             node = innerDelete(node);
