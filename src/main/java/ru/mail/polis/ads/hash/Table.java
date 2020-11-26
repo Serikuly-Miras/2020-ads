@@ -39,7 +39,7 @@ public class Table<Key, Value> implements HashTable<Key, Value> {
     public Value get(@NotNull Key key) {
         int hash = hash(key);
         chainNode<Key, Value> temp = table[hash];
-        while (temp != null && temp.key != key) {
+        while (temp != null && !temp.key.equals(key)) {
             temp = temp.next;
         }
         return temp == null ? null : temp.value;
@@ -55,11 +55,11 @@ public class Table<Key, Value> implements HashTable<Key, Value> {
             return;
         }
 
-        while (temp.next != null && temp.key != key) {
+        while (temp.next != null && !temp.equals(key)) {
             temp = temp.next;
         }
 
-        if (temp.key != key) {
+        if (!temp.key.equals(key)) {
             temp.next = new chainNode(key, value);
             ++size;
         } else {
@@ -90,13 +90,13 @@ public class Table<Key, Value> implements HashTable<Key, Value> {
 
         if (temp == null) return null;
 
-        if (temp.key == key) {
+        if (temp.key.equals(key)) {
             --size;
             table[hash] = temp.next;
             return temp.value;
         }
 
-        while (temp.next != null && temp.next.key != key) {
+        while (temp.next != null && !temp.next.key.equals(key)) {
             temp = temp.next;
         }
 
